@@ -3,7 +3,7 @@
 class TaskFactory
 {
 public:
-    static Object* makeRandomObject(  ) {
+    static Task* makeRandomTask(  ) {
         switch ( rand(  ) % 3 ) {
         case 0:
             return make_plus(  );
@@ -16,17 +16,17 @@ public:
         }
     }
 
-    static Object* make_plus(  ) {
+    static Task* make_plus(  ) {
         double x = randomDouble( -1000, 1000 );
         double y = randomDouble( -1000, 1000 );
         return new BinaryTask( "plus", x, y );
     }
-    static Object* make_minus(  ) {
+    static Task* make_minus(  ) {
         double x = randomDouble( -1000, 1000 );
         double y = randomDouble( -1000, 1000 );
         return new BinaryTask( "minus", x, y );
     }
-    static Object* make_multiply(  ) {
+    static Task* make_multiply(  ) {
         double x = randomDouble( -1000, 1000 );
         double y = randomDouble( -1000, 1000 );
         return new BinaryTask( "multiply", x, y );

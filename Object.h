@@ -1,5 +1,4 @@
-#ifndef OBJECT_H
-#define OBJECT_H // is it supposed to be like this?) it's not going to be without it
+#pragma once
 #include < iostream >
 #include "Container.h"
 #include < string >
@@ -8,38 +7,30 @@ template< class T >
 struct numcopies
 {
     static size_t copies(  ) { return sm_counter(  ); }
-protected: // in the private constructors are not available to the heirs
-    ~numcopies(  ) { --sm_counter(  ); }   
-    numcopies(  ) { ++sm_counter(  ); }  
+protected:
+    ~numcopies() { --sm_counter(); }
+    numcopies() { ++sm_counter(); }
 private:
-    static size_t & sm_counter(  ) { static size_t c = 0; return c; } // works and well)
+    static size_t & sm_counter(  ) { static size_t c = 0; return c; } 
 };
 
 
 class Object : public numcopies<  Object > {
 public:
-    //Object(  ) {}
     virtual ~Object(  ) {}
     virtual std::string to_string(  ) const = 0;
-    virtual int do_Smth(  ) = 0; // There was some logic here
-    // I remembered that in the third task I create Objects, not Tasks, and I need them to do something
-    // it did not seem logical to work with a lower level of abstraction
 };
 
 class Named :virtual public Object {
 public:
-    //Named(  ) {};
     Named( std::string & s  ):m_name( s ) {};
-    virtual ~Named(  ) {}; // below the function should be virtual, now it's ok
     virtual std::string to_string(  ) const = 0;
 protected:
     std::string m_name;
 };
 
-class Task : virtual public Object { // That was a typo.
+class Task : virtual public Object { 
 public:
-    //Task(  ) {};
-    virtual ~Task( void ) {};
     virtual std::string to_string(  ) const = 0;
     virtual int do_Smth(  ) = 0;
 };
@@ -159,4 +150,3 @@ public:
         return 0;
     }
 };
-#endif //OBJECT_H

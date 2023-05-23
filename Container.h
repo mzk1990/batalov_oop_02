@@ -7,8 +7,8 @@
 template < typename T > class Container
 {
 public:
-    Container() {} // the implementation can be removed, yes. the constructor itself if removed VS does not build
-    Container( Container const &  origin ) : Container(  ) {
+    Container() {}
+    Container( Container const &  origin ) {
         * this = origin;
     }
     Container &  operator =( Container const &  origin ) {
@@ -54,7 +54,7 @@ public:
         ++m_size;
     }
 
-    void pop_front(  )
+    T& pop_front(  )
     {
         if ( is_empty(  ) ) {
             throw std::out_of_range("Container is empty. Nothing to delete.");
@@ -68,30 +68,12 @@ public:
         else{
             m_last = nullptr;
         }
-        delete remove;
         --m_size;
+        return remove->m_value;
+
     }
 
-    void reverse_list(  )
-    {
-        auto head = m_first;
-        if ( m_first == nullptr ) {
-            m_last->m_next = m_first;
-            return;
-        }
-        auto cur = head;
-        Node< T > * m_prev = nullptr;
-        while ( cur != nullptr ) {
-            auto temp = cur->m_next;
-            cur->m_next = m_prev;
-            m_prev = cur;
-            cur = temp;
-        }
-        m_first = m_prev;
-        return;
-    }
-
-    void pop_back(  )
+    T& pop_back(  )
     {
         if ( is_empty(  ) ) {
             throw std::out_of_range("Container is empty. Nothing to delete.");
@@ -105,23 +87,6 @@ public:
         else{
             m_first = nullptr;
         }
-        delete remove;
-        --m_size;
-    }
-    T& pop(  ) { // task 3 point 4, they want me to pop() to throw the task and execute it from the outside, and above pop_back() to remove the object from the container
-        if ( is_empty(  ) ) {
-            throw std::out_of_range("Container is empty. Nothing to delete.");
-        }
-        Node< T > * remove;
-        remove = m_last;
-        m_last = remove->m_prev;
-        if ( m_last != nullptr ) {
-            m_last->m_next = nullptr;
-        }
-        else{
-            m_first = nullptr;
-        }
-        //delete remove;
         --m_size;
         return remove->m_value;
     }
@@ -156,13 +121,24 @@ public:
             elem = elem->m_next;
         }
     }
-    void forEach( std::function< void( T const &  ) > func ) const {
-        Node< T > * elem = m_first;
-        while ( elem != nullptr ) {
-            func( elem->m_value );
-            elem = elem->m_next;
+    void reverse_list()
+    {
+        auto head = m_first;
+        if (m_first == nullptr) {
+            m_last->m_next = m_first;
+            return;
         }
-    } // task 3 point 5, run through the content and touch each element in a loop
+        auto cur = head;
+        Node< T >* m_prev = nullptr;
+        while (cur != nullptr) {
+            auto temp = cur->m_next;
+            cur->m_next = m_prev;
+            m_prev = cur;
+            cur = temp;
+        }
+        m_first = m_prev;
+        return;
+    }
 private:
     template < typename T > class Node
     {
@@ -173,10 +149,10 @@ private:
             , m_next(nullptr)
         {}
         T m_value;
-        Node< T >* m_prev;
-        Node< T >* m_next;
+        Node< T > * m_prev;
+        Node< T > * m_next;
     };
-    unsigned int m_size;
-    Node< T > * m_first;
-    Node< T > * m_last;
+    unsigned int m_size = 0;
+    Node< T > * m_first = nullptr;
+    Node< T > * m_last = nullptr;
 };

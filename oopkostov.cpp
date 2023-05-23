@@ -1,19 +1,16 @@
-﻿// oopkostov.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
-#include < iostream >
+﻿#include < iostream >
 #include "Object.h"
 #include "TaskFactory.h"
 int main(  )
 {
-    auto cTask = new Container<Object*>;
+    auto cTask = new Container<Task*>;
     auto cTaskWaited = new Container<std::string>;
     auto cTaskPerformed = new Container<std::string>;
     auto counter = new CounterTaskObject(  );
     std::cout << counter->to_string() << std::endl << std::endl;
     std::cout<< "fill the container with random tasks" << std::endl << std::endl;
     for ( int i = 0; i < 20; ++i ) {
-        cTask->push_back( TaskFactory::makeRandomObject(  ) );
+        cTask->push_back( TaskFactory::makeRandomTask(  ) );
     }
     std::cout << "Let's look at the tasks before we do them" << std::endl << std::endl;
     cTask->forEach( [cTaskWaited]( Object* const o ) {
@@ -23,10 +20,9 @@ int main(  )
     std::cout << std::endl;
     int size = cTask->get_count(  );
     for ( int i = 0; i < size; ++i ) {
-        auto t = cTask->pop(  );
-        t->do_Smth(  );
-        //std::cout<<t->to_string(  )<<std::endl;
-        cTaskPerformed->push_back( t->to_string(  ) );
+        auto t = cTask->pop_back();
+        t->do_Smth();
+        cTaskPerformed->push_back(t->to_string());
         delete t;
     }
     std::cout << "look at the tasks after completion" << std::endl << std::endl;
@@ -53,16 +49,4 @@ int main(  )
         std::cout << n << " ";
     } );
     delete number;
-    
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
